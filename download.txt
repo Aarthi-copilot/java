@@ -1,0 +1,141 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API Response Service",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/response": {
+      "get": {
+        "summary": "Retrieve API Response",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataItem"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "included": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataItem"
+            }
+          }
+        }
+      },
+      "DataItem": {
+        "type": "object",
+        "properties": {
+          "relationships": {
+            "$ref": "#/components/schemas/Relationships"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/Attributes"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Relationships": {
+        "type": "object",
+        "properties": {
+          "customers": { "$ref": "#/components/schemas/NestedRelationship" },
+          "preferences": { "$ref": "#/components/schemas/NestedRelationship" },
+          "kyc": { "$ref": "#/components/schemas/NestedRelationship" },
+          "documents": { "$ref": "#/components/schemas/NestedRelationship" },
+          "relatedrelation": { "$ref": "#/components/schemas/NestedRelationship" },
+          "cifs": { "$ref": "#/components/schemas/NestedRelationship" },
+          "contacts": { "$ref": "#/components/schemas/NestedRelationship" }
+        }
+      },
+      "NestedRelationship": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RelationshipData"
+            }
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "RelationshipData": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" }
+        }
+      },
+      "Attributes": {
+        "type": "object",
+        "properties": {
+          "Reference": { "type": "string" },
+          "Countrycode": { "type": "string" },
+          "gender": { "type": "string" },
+          "dateofbirth": { "type": "string" },
+          "birthplace": { "type": "string" },
+          "bookingloc": { "type": "string" },
+          "cif-no": { "type": "string" },
+          "cityname": { "type": "string" },
+          "postal-no": { "type": "string" },
+          "docexpirydate": { "type": "string" },
+          "docnumber": { "type": "string" },
+          "profile-id": { "type": "string" },
+          "cifid": { "type": "string" }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "self": { "type": "string", "format": "uri" },
+          "related": { "type": "string", "format": "uri" },
+          "last": { "type": "string", "format": "uri" },
+          "first": { "type": "string", "format": "uri" }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "totalresourcecount": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
