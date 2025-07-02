@@ -1,0 +1,288 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Customer Info API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/msd/pvb/data/custInfo": {
+      "get": {
+        "summary": "Get customer info",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustInfoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. The request could not be understood or was missing required parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found. The requested resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error. Something went wrong on the server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CustInfoResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Customer" }
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "first": { "type": "string" },
+              "last": { "type": "string" }
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "totalResourceCount": { "type": "string" }
+            }
+          },
+          "included": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                { "$ref": "#/components/schemas/Contact" },
+                { "$ref": "#/components/schemas/CIF" },
+                { "$ref": "#/components/schemas/Document" },
+                { "$ref": "#/components/schemas/Address" },
+                { "$ref": "#/components/schemas/KYC" },
+				{ "$ref": "#/components/schemas/Relatedrelationships"}
+              ]
+            }
+          }
+        }
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string" },
+          "id": { "type": "string" },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "gender": { "type": "string" },
+              "customer-nationality-description": { "type": "string" },
+              "date-of-birth": { "type": "string", "format": "date" },
+              "profile-id": { "type": "string" },
+              "customer-nationality-code": { "type": "string" },
+              "middle-name": { "type": "string", "nullable": true },
+              "first-name": { "type": "string" },
+              "last-name": { "type": "string" }
+            }
+          },
+          "relationships": {
+            "type": "object",
+            "preferences": { "$ref": "#/components/schemas/Relationship" }
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": { "type": "string" }
+            }
+          }
+        }
+      },
+      "Relationship": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array"
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": { "type": "string" },
+              "related": { "type": "string" }
+            }
+          }
+        }
+      },
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "example": "contacts" },
+          "id": { "type": "string" },
+          "relationships": { "type": "object", "nullable": true },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "reference": { "type": "string", "nullable": true },
+              "country-code": { "type": "string", "nullable": true },
+              "country-type-code": { "type": "string" },
+              "contact": { "type": "string", "nullable": true },
+              "contact-classification-code": { "type": "string" },
+              "contact-type-code-description": { "type": "string" },
+              "contact-classification-code-description": { "type": "string" },
+              "preferred-contact": { "type": "string", "nullable": true }
+            }
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": { "type": "string" }
+            }
+          }
+        }
+      },
+      "CIF": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "example": "cifs" },
+          "id": { "type": "string" },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "booking-location": { "type": "string" },
+              "cif-no": { "type": "string" }
+            }
+          },
+          "relationships": { "type": "object", "nullable": true },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": { "type": "string" }
+            }
+          }
+        }
+      },
+      "Document": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "example": "documents" },
+          "id": { "type": "string" },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "document-expiry-date": { "type": "string", "nullable": true },
+              "document-number": { "type": "string" },
+              "document-type": { "type": "string" },
+              "document-type-description": { "type": "string" },
+              "document-receive-date": { "type": "string", "format": "date" }
+            }
+          },
+          "relationships": { "type": "object", "nullable": true },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": { "type": "string" }
+            }
+          }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "example": "addresses" },
+          "id": { "type": "string" },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "address-line1": { "type": "string", "nullable": true },
+              "address-line2": { "type": "string", "nullable": true },
+              "address-line3": { "type": "string", "nullable": true },
+              "city-name": { "type": "string" },
+              "postal-code": { "type": "string", "nullable": true },
+              "country-code": { "type": "string" },
+              "address-type": { "type": "string", "nullable": true },
+              "state": { "type": "string", "nullable": true },
+              "region": { "type": "string", "nullable": true }
+            }
+          },
+          "relationships": { "type": "object", "nullable": true },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": { "type": "string" }
+            }
+          }
+        }
+      },
+      "KYC": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "example": "kycs" },
+          "id": { "type": "string" },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "birth-place": { "type": "string", "nullable": true }
+            }
+          },
+          "relationships": { "type": "object", "nullable": true },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": { "type": "string" }
+            }
+          }
+        }
+      },
+	  "Relatedrelationships": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "example": "relatedrelationships" },
+          "id": { "type": "string" },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "profile-id": { "type": "string", "nullable": true },
+              "cif-id": { "type": "string", "nullable": true }
+            }
+          },
+          "relationships": { "type": "object", "nullable": true },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": { "type": "string" }
+            }
+          }
+        }
+      },
+	  "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "errorCode": { "type": "string" },
+          "errorMessage": { "type": "string" }
+        }
+      },
+    }
+  }
+}
